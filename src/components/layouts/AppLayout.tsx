@@ -1,46 +1,59 @@
-import { Outlet } from "react-router-dom";
-import { Button } from "./ui/button";
-import UserIcon from "@/assets/images/user.png";
+import { useState, useMemo } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
+import { ROUTES } from "@/routes/routes";
+import { useGetUserInfo } from "@/queries/user/queries";
+import baseService from "@/services/baseService";
 import ArianaLogo from "@/assets/images/arianaLogo.svg";
-import { useState } from "react";
-import LogoutModal from "./LogoutModal";
+import LogoutIcon from "@/assets/images/logout.svg";
+import LogoutModal from "../LogoutModal";
+import UserProfile from "../UserProfile";
+import UserProfileSkeleton from "../skeleton/UserProfileSkeleton";
 
 function AppLayout() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const navigate = useNavigate();
+
+  const { data: userInfo, isLoading } = useGetUserInfo();
 
   const handleLogout = () => {
     console.log("Logging out");
     setShowLogoutModal(false);
-    // Add actual logout functionality here
+    baseService.removeToken();
+    navigate(ROUTES.PUBLIC.LOGIN.path);
   };
+  
+  const fullName = useMemo(() => {
+    if (!userInfo) return '';
+    return `${userInfo.first_name || ''} ${userInfo.last_name || ''}`.trim();
+  }, [userInfo]);
 
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
       <div className="w-[240px] bg-[var(--tertiary-color)] flex flex-col justify-between border-r border-[var(--border-color)]">
-        <div className="flex flex-col gap-3 items-center p-6">
-          <img
-            src={UserIcon}
-            alt="User"
-            className="w-[64px] h-[64px] rounded-full"
+        {isLoading ? (
+          <UserProfileSkeleton />
+        ) : (
+          <UserProfile
+            name={fullName}
+            username={userInfo?.username}
+            avatar={userInfo?.avatar}
           />
-          <div className="flex flex-col gap-1 items-center">
-            <h2 className="h2">Ali Amirasgari</h2>
-            <p className="user-name">@Ali</p>
-          </div>
-        </div>
+        )}
         <div className="p-2">
           <Button
             variant="warning"
             className="w-full"
             onClick={() => setShowLogoutModal(true)}
           >
+            <img src={LogoutIcon} alt="Logout" className="w-4 h-4" />
             Logout
           </Button>
         </div>
       </div>
 
-      {/* Main content area */}
+      {/* Main content */}
       <div className="flex-1 flex flex-col">
         {/* Navbar */}
         <div className="h-[54.45px] bg-[var(--tertiary-color)] border-b border-[var(--border-color)] flex items-center justify-between px-6">
@@ -57,9 +70,9 @@ function AppLayout() {
       </div>
 
       {/* Logout Modal */}
-      <LogoutModal 
-        isOpen={showLogoutModal} 
-        onClose={() => setShowLogoutModal(false)} 
+      <LogoutModal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
         onLogout={handleLogout}
       />
     </div>

@@ -93,5 +93,36 @@ input {
   color: var(--warning-color);
 }
 
+.Toastify__toast--success {
+  padding: 0.5rem 1rem !important;
+  width: 25rem !important;
+  background-color: #E4F5E2 !important;
+  border-color: #498C85 !important ;
+  color: #1C6F67 !important;
+  font-size: 0.875rem;
+  font-weight: 400;
+  border-radius: 0.5rem;
+}
 
+.Toastify__toast--error {
+  padding: 0.5rem 1rem !important;
+  width: 25rem !important;
+  background-color: #faebeb !important;
+  border-color: #e49d9d !important ;
+  color: #bd1010 !important;
+  font-size: 0.875rem;
+  font-weight: 400;
+  border-radius: 0.5rem;
+}
+
+.Toastify__toast--warning {
+  padding: 0.5rem 1rem !important;
+  width: 25rem !important;
+  background-color: #fff6ed !important;
+  border-color: #ff9426 !important ;
+  color: #ff9426 !important;
+  font-size: 0.875rem;
+  font-weight: 400;
+  border-radius: 0.5rem;
+}
 

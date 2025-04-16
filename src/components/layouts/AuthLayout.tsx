@@ -3,7 +3,7 @@ import ArianaLogo from "@/assets/images/arianaLogo.svg";
 import { ROUTES } from "@/routes/routes";
 
 export default function AuthLayout() {
-  const { pathname } = useLocation(); // get the current pathname
+  const { pathname } = useLocation();
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="border-2 border-[var(--border-color)] rounded-xl p-5 max-w-[348px] w-full min-h-[504px]">

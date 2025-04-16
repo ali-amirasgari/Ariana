@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -15,9 +16,18 @@ interface LogoutModalProps {
   onLogout: () => void;
 }
 
-export function LogoutModal({ isOpen, onClose, onLogout }: LogoutModalProps) {
+function LogoutModal({ isOpen, onClose, onLogout }: LogoutModalProps) {
+
+  const handleClose = useCallback(() => {
+    onClose();
+  }, [onClose]);
+
+  const handleLogout = useCallback(() => {
+    onLogout();
+  }, [onLogout]);
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className="flex flex-col items-center gap-2 mt-4">
           <DialogTitle>
@@ -35,10 +45,10 @@ export function LogoutModal({ isOpen, onClose, onLogout }: LogoutModalProps) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex items-center justify-center mt-4">
-          <Button variant="secondary" className="w-full" onClick={onLogout}>
+          <Button variant="secondary" className="w-full" onClick={handleLogout}>
             Log out
           </Button>
-          <Button variant="default" className="w-full" onClick={onClose}>
+          <Button variant="default" className="w-full" onClick={handleClose}>
             Cancel
           </Button>
         </DialogFooter>
@@ -47,4 +57,4 @@ export function LogoutModal({ isOpen, onClose, onLogout }: LogoutModalProps) {
   );
 }
 
-export default LogoutModal;
+export default memo(LogoutModal);

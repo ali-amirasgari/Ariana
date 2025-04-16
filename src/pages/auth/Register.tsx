@@ -7,13 +7,17 @@ import { z } from "zod";
 import PlusIcon from "@/assets/images/plus.svg";
 import UserIcon from "@/assets/images/user.png";
 import { useState, useRef } from "react";
+import authService from "@/services/authService";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/routes";
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 function Register() {
   const [avatarPreview, setAvatarPreview] = useState<string>(UserIcon);
+  const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -24,7 +28,21 @@ function Register() {
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
-    console.log(data);
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key as keyof RegisterFormValues]);
+    });
+    
+    try {
+      const response = await authService.register(formData);
+      
+      if (response.status === 201) {
+        localStorage.setItem("ariana-token", response.data.token);
+        navigate(ROUTES.PROTECTED.DASHBOARD.path);
+      }
+    } catch (error: any) {
+      setError(error.response.data.non_field_errors[0]);
+    }
   };
 
   const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,8 +121,8 @@ function Register() {
           label="Username"
           type="text"
           placeholder="Please enter username"
-          error={errors.userName?.message}
-          {...register("userName")}
+          error={errors.username?.message}
+          {...register("username")}
         />
         <FormField
           label="Password"
@@ -120,6 +138,11 @@ function Register() {
           error={errors.confirm_password?.message}
           {...register("confirm_password")}
         />
+        {error && (
+          <div className="flex items-center justify-center mb-2">  
+            <p className="error">{error}</p>
+          </div>
+        )}
         <Button type="submit" className="w-full mt-1" disabled={isSubmitting}>
           {isSubmitting ? "Registering" : "Register"}
         </Button>

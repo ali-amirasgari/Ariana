@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const loginSchema = z.object({
-  userName: z.string().min(1, "Username is required"),
+  username: z.string().min(1, "Username is required"),
   password: z
     .string({ required_error: "Password is required" })
     .min(1, "Password is required"),
@@ -12,7 +12,7 @@ export const registerSchema = z
     avatar: z.instanceof(File),
     first_name: z.string().min(3, "First name is required"),
     last_name: z.string().min(3, "Last name is required"),
-    userName: z.string().min(3, "Username is required"),
+    username: z.string().min(3, "Username is required"),
     password: z
       .string({ required_error: "Password is required" })
       .min(6, "Password is required"),

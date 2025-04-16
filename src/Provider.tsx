@@ -6,6 +6,7 @@ interface ProviderProps {
 }
 
 function Provider({ children }: ProviderProps) {
+  
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {

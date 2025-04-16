@@ -5,6 +5,9 @@ import { z } from "zod";
 import { FormField } from "@/components/ui/formField";
 import { loginSchema } from "@/validations/auth";
 import { useState } from "react";
+import authService from "@/services/authService";
+import { ROUTES } from "@/routes/routes";
+import { useNavigate } from "react-router-dom";
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
@@ -17,13 +20,20 @@ function Login() {
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
+  const navigate = useNavigate();
 
   const onSubmit = async (data: LoginFormValues) => {
-    // Simulating API call with a timeout
-    console.log("Login attempt with:", data);
-    // Here you would typically make an API call to your authentication endpoint
-    // For example: await loginUser(data);
-    return new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const response = await authService.login(data);
+
+      if (response.status === 200) {
+        setIsError(false);
+        localStorage.setItem("ariana-token", response.data.token);
+        navigate(ROUTES.PROTECTED.DASHBOARD.path);
+      }
+    } catch (error) {
+      setIsError(true);
+    }
   };
 
   return (
@@ -38,8 +48,8 @@ function Login() {
         <FormField
           label="Username"
           placeholder="Please enter your username"
-          error={errors.userName?.message}
-          {...register("userName")}
+          error={errors.username?.message}
+          {...register("username")}
         />
         <FormField
           label="Password"

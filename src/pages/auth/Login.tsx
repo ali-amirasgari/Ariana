@@ -2,28 +2,20 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { FormField } from "@/components/ui/FormField";
+import { FormField } from "@/components/ui/formField";
+import { loginSchema } from "@/validations/auth";
+import { useState } from "react";
 
-// Define validation schema with Zod
-const loginSchema = z.object({
-  userName: z.string().min(3, "Username must be at least 3 characters"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
-
-// Type inference from the schema
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 function Login() {
+  const [isError, setIsError] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      userName: "",
-      password: "",
-    },
   });
 
   const onSubmit = async (data: LoginFormValues) => {
@@ -35,25 +27,40 @@ function Login() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
-      <form className="w-full max-w-sm space-y-4" onSubmit={handleSubmit(onSubmit)}>
+    <div>
+      <div className="flex flex-col gap-1 mb-6">
+        <h1 className="h1">Login</h1>
+        <p className="body1">
+          Enter your username and password to login to your account.
+        </p>
+      </div>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <FormField
           label="Username"
-          placeholder="Enter your username"
+          placeholder="Please enter your username"
           error={errors.userName?.message}
           {...register("userName")}
         />
         <FormField
           label="Password"
           type="password"
-          placeholder="Enter your password"
+          placeholder="Please enter your password"
           error={errors.password?.message}
           {...register("password")}
         />
-        <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
-          <Button type="submit" variant="default" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Signing in..." : "Sign in"}
+        {isError && (
+          <div className="flex items-center justify-center mb-2">  
+            <p className="error">Invalid username or password</p>
+          </div>
+        )}
+        <div className="flex flex-col">
+          <Button
+            type="submit"
+            variant="default"
+            className="w-full mt-1"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Logging in" : "Login"}
           </Button>
         </div>
       </form>

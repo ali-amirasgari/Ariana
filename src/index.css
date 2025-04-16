@@ -52,10 +52,18 @@ input {
   color: var(--label-color);
 }
 
-.body {
+.body1 {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-normal);
   color: var(--secondary-color);
+  letter-spacing: 0.025rem;
+  line-height: 20px;
+}
+
+.body2 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--label-color);
 }
 
 .error {

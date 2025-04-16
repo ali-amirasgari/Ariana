@@ -59,6 +59,13 @@ input {
   color: var(--black-color);
 }
 
+.h3 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--black-color);
+  letter-spacing: 0.025rem;
+}
+
 .user-name {
   font-size: 15px;
   font-weight: var(--font-weight-normal);

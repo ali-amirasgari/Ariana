@@ -2,8 +2,18 @@ import { Outlet } from "react-router-dom";
 import { Button } from "./ui/button";
 import UserIcon from "@/assets/images/user.png";
 import ArianaLogo from "@/assets/images/arianaLogo.svg";
+import { useState } from "react";
+import LogoutModal from "./LogoutModal";
 
 function AppLayout() {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleLogout = () => {
+    console.log("Logging out");
+    setShowLogoutModal(false);
+    // Add actual logout functionality here
+  };
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -23,7 +33,7 @@ function AppLayout() {
           <Button
             variant="warning"
             className="w-full"
-            onClick={() => console.log("Logout clicked")}
+            onClick={() => setShowLogoutModal(true)}
           >
             Logout
           </Button>
@@ -45,6 +55,13 @@ function AppLayout() {
           <Outlet />
         </div>
       </div>
+
+      {/* Logout Modal */}
+      <LogoutModal 
+        isOpen={showLogoutModal} 
+        onClose={() => setShowLogoutModal(false)} 
+        onLogout={handleLogout}
+      />
     </div>
   );
 }

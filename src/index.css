@@ -5,6 +5,7 @@
 :root {
   --primary-color: #0F172A;
   --secondary-color: #64748B;
+  --tertiary-color: #F8FAFC;
   --white-color: #FFFFFF;
   --black-color: #000000;
   --warning-color: #DC2626;
@@ -50,6 +51,19 @@ input {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   color: var(--label-color);
+}
+
+.h2 {
+  font-size: 15px;
+  font-weight: var(--font-weight-bold);
+  color: var(--black-color);
+}
+
+.user-name {
+  font-size: 15px;
+  font-weight: var(--font-weight-normal);
+  color: #585858;
+  letter-spacing: 0.025rem;
 }
 
 .body1 {
